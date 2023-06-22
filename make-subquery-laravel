@@ -1,3 +1,5 @@
+Sử dụng trong trường hợp muốn chuyển đổi câu lệnh sql qua eloquent hoặc query builder trong laravel
+
 // option 1: DB::table(Closure, alias) for subquery
 $count = DB::table(function ($sub) {
         $sub->from('abc')
