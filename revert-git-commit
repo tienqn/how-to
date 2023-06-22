@@ -1,0 +1,17 @@
+Bước 1
+# Resets index to former commit; replace '56e05fced' with your commit code
+ git reset 56e05fced 
+
+Bước 2
+# Moves pointer back to previous HEAD 
+git reset --soft HEAD@{1} 
+git commit -m "Revert to 56e05fced" 
+
+Bước 3
+# Updates working copy to reflect the new commit 
+git reset --hard 
+
+Bước 4
+# Push your changes to respective branch 
+git push -f
+
