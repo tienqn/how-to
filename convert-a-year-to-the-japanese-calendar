@@ -1,0 +1,93 @@
+if (!function_exists('formatDate')) {    
+    /**
+     * @param  string $date
+     * @param  int $option
+     * @param  string $format
+     * 
+     * @return string
+     */
+    function formatDate($date, $option = 0, $format = '/'): string 
+    {
+        $d = new DateTime($date);
+        $month = $d->format('m');
+        $day = $d->format('d');
+        $year = $d->format('Y');
+    
+        if (strlen($month) < 2) $month = '0' . $month;
+        if (strlen($day) < 2) $day = '0' . $day;
+    
+        if (!$option) {
+            $result = implode($format, array($year, $month, $day));
+        } else {
+            $result = implode('', array($year, $month, $day));
+        }
+
+        return $result;
+    }
+}
+
+if (!function_exists('toWareki')) {    
+    /**
+     * @param  mixed $dateText
+     * @return string
+     */
+    function toWareki($dateText): string 
+    {
+        if (!$dateText) {
+            return '';
+        }
+    
+        if (strpos($dateText, '/') !== false) {
+            $dateText = str_replace('/', '-', $dateText);
+        }
+
+        if (strpos($dateText, '/') !== false) {
+            $dateText = str_replace('/', '-', $dateText);
+        }
+    
+        $date_split = formatDate($dateText);
+        $dates = explode('/', $date_split);
+        $y = (int)$dates[0];
+        $m = (int)$dates[1];
+        $d = (int)$dates[2];
+    
+        // Only applicable from Meiji year onwards (1873 onwards)
+        if ($y < 1873) {
+            return false;
+        }
+    
+        $date = formatDate($dateText, 1);
+        $label = '';
+        $localYear = '';
+        
+        // Split by date
+        if ($date >= 20190501) {
+            $label = '令和';
+            $localYear = $y - 2019 + 1;
+        } else if ($date >= 19890108) {
+            $label = '平成';
+            $localYear = $y - 1988;
+        } else if ($date >= 19261225) {
+            $label = '昭和';
+            $localYear = $y - 1925;
+        } else if ($date >= 19120730){
+            $label = '大正';
+            $localYear = $y - 1911;
+        } else {
+            $label = '明治';
+            $localYear = $y - 1868;
+        }
+        
+        // The first year is "元年"
+        if ($localYear == 1) {
+            $wareki = $label . '元年';
+        } else {
+            $wareki = $label . $localYear . '年';
+        }
+    
+        return $wareki . $m . '月' . $d . '日';
+    }
+}
+
+echo toWareki('2023/06/22');
+// Kết quả: 令和5年6月22日
