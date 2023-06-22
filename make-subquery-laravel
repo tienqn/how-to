@@ -1,0 +1,22 @@
+// option 1: DB::table(Closure, alias) for subquery
+$count = DB::table(function ($sub) {
+        $sub->from('abc')
+            ->groupBy('col1');
+    }, 'a')
+    ->count();
+
+// option 2: DB::table(Builder, alias) for subquery
+$sub   = DB::table('abc')->groupBy('col1');
+$count = DB::table($sub, 'a')->count();
+
+// option 3: DB::query()->from(Closure, alias)
+$count = DB::query()
+    ->from(function ($sub) {
+        $sub->from('abc')
+            ->groupBy('col1')
+    }, 'a')
+    ->count();
+
+// option 4: DB::query()->from(Builder, alias)
+$sub   = DB::table('abc')->groupBy('col1');
+$count = DB::query()->from($sub, 'a')->count();
