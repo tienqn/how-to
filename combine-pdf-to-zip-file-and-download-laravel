@@ -1,0 +1,52 @@
+//enable php zip extension
+<?php
+
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Illuminate\Support\Facades\Storage;
+
+function executeWithPageNumber(string $view, array $dataExport, string $fileName):BinaryFileResponse
+{
+    $listIds = $dataExport['genericDrugDispensingList'];
+
+    $lis = collect($listIds)->map(function($item) {
+        return $item['medicalInstitution']->medical_institutions_id;
+    });
+
+    $lis->map(function($item) use ($view, $dataExport, $fileName) {
+        $abc = $dataExport['genericDrugDispensingList'];
+        $filtered = collect($abc)->reject(function($value) use ($item) {
+            return $value['medicalInstitutionId'] != $item;
+        });
+        // dd($item, $abc, $filtered->toArray());
+        $dataExport['genericDrugDispensingList'] = $filtered->toArray();
+        // $path = storage_path('app/generic_drug_dispensing/' . $item);
+        // File::makeDirectory($path, $mode = 0777, true, true);
+        $pdf = \App::make('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->loadView($view, $dataExport);
+        // dd($dataExport['genericDrugDispensingList'][0]);
+        $pdfName = $item;
+        $content = $pdf->output();
+        Storage::put('generic_drug_dispensing/' . $pdfName . '-' . $this->setFileName($fileName), $content) ;
+        // return $pdf->download($this->setFileName($fileName));
+    }); 
+
+    $zip_file = storage_path($fileName . '＿' . Carbon::now()->format('Ymd') . '.zip'); 
+    $zip = new \ZipArchive();
+    $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+    
+    $path = storage_path('app/generic_drug_dispensing');
+    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+    foreach ($files as $name => $file)
+    {
+        // We're skipping all subfolders
+        if (!$file->isDir()) {
+            $filePath     = $file->getRealPath();
+            // extracting filename with substr/strlen
+            $relativePath = last(explode("/", $filePath));
+            $zip->addFile($filePath, $relativePath);
+        }
+    }
+    $zip->close();
+    return response()->download($zip_file);
+}
