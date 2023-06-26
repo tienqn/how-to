@@ -48,5 +48,6 @@ function executeWithPageNumber(string $view, array $dataExport, string $fileName
         }
     }
     $zip->close();
+    File::deleteDirectory($path);
     return response()->download($zip_file);
 }
