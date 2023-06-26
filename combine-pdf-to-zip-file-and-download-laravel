@@ -17,18 +17,13 @@ function executeWithPageNumber(string $view, array $dataExport, string $fileName
         $filtered = collect($abc)->reject(function($value) use ($item) {
             return $value['medicalInstitutionId'] != $item;
         });
-        // dd($item, $abc, $filtered->toArray());
         $dataExport['genericDrugDispensingList'] = $filtered->toArray();
-        // $path = storage_path('app/generic_drug_dispensing/' . $item);
-        // File::makeDirectory($path, $mode = 0777, true, true);
         $pdf = \App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
         $pdf->loadView($view, $dataExport);
-        // dd($dataExport['genericDrugDispensingList'][0]);
         $pdfName = $item;
         $content = $pdf->output();
         Storage::put('generic_drug_dispensing/' . $pdfName . '-' . $this->setFileName($fileName), $content) ;
-        // return $pdf->download($this->setFileName($fileName));
     }); 
 
     $zip_file = storage_path($fileName . '＿' . Carbon::now()->format('Ymd') . '.zip'); 
