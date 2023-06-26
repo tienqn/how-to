@@ -1,4 +1,5 @@
 //enable php zip extension
+//tut link: https://laraveldaily.com/post/how-to-create-zip-archive-with-files-and-download-it-in-laravel
 <?php
 
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
