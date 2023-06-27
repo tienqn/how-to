@@ -1,5 +1,5 @@
 <?php
-
+//https://www.w3schools.com/php/phptryit.asp?filename=tryphp_intro
 date_default_timezone_set('Asia/Ho_Chi_Minh');
 $data = array(
     '11-10' => 'Sinh nhật bà nội',
