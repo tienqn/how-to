@@ -6,7 +6,7 @@
 # copy source vao may ao
 
 sudo apt update
-sudo apt install nginx
+sudo apt install -y nginx
 # sudo nginx -t
 # sudo systemctl start nginx
 # sudo systemctl stop nginx
@@ -26,28 +26,37 @@ php -r "if (hash_file('SHA384', '/tmp/composer-setup.php') === '$HASH') { echo '
 sudo php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer
 
 sudo apt update
-sudo apt install mysql-server
+sudo apt install -y mysql-server
 
 # sudo apt update
 # sudo apt install redis-server
 # sudo systemctl start mysql.service
 # sudo mysql
+
 # create database laravel
 # CREATE USER 'sammy'@'localhost' IDENTIFIED BY 'password';
+# CREATE USER 'tien'@'ip_may_host' IDENTIFIED BY 'password';
+
 # GRANT ALL PRIVILEGES ON laravel.* TO 'sammy'@'localhost' WITH GRANT OPTION;
+# GRANT ALL PRIVILEGES ON laravel.* TO 'tien'@'ip_may_host' WITH GRANT OPTION;
+
 # FLUSH PRIVILEGES;
+# sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+# bind-address :127.0.0.1 => 0.0.0.0 => mục đích có thể truy cập vào db từ bất kỳ địa chỉ nào
+# sudo systemctl stop mysql.service
+# sudo systemctl start mysql.service
+
 sudo cp default /etc/nginx/sites-available/
 sudo systemctl reload nginx
 sudo chmod -R 777 storage/
 composer install
 ip a
 
-#NGINX CONFIG
 server {
     listen 80;
     listen [::]:80;
     server_name laravel-8.x;
-    root /srv/laravel-8.x/public;
+    root /srv/laravel-10.x/public;
  
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-Content-Type-Options "nosniff";
