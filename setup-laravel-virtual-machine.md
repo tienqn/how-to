@@ -1,8 +1,11 @@
 
 # Hướng dẫn cài đặt laravel bằng máy ảo ubuntu
 NOTE: FILE _setup.sh_ + _default_ (NGINX CONFIG) ĐƯỢC ĐẶT TRONG THƯ MỤC GỐC CỦA LARAVEL
+
 _Yêu cầu cấu hình_
+
 Ubuntu server 22 + laravel10 + php8.1 + mysql + nginx
+
 Vào máy ảo tạo thư mục chứa mã nguồn
 ```sh
 sudo mkdir /srv/laravel-8.x
