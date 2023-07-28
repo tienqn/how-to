@@ -36,3 +36,34 @@ if (!$zip->setEncryptionName($baseName, ZipArchive::EM_AES_256)) {
 
 $zip->close();
 ```
+# Extract file with set password
+
+```php
+<?php
+    // Đường dẫn và tên file zip muốn giải nén
+    $zipFilePath = storage_path('OQSsiquc01req_1690527081EXv2XqrP8w.zip');
+
+    // Đường dẫn đến thư mục muốn giải nén file zip
+    $extractToPath = '/app/storage/app/';
+
+    // Mật khẩu của file zip
+    $password = '123456';
+
+    // Tạo đối tượng ZipArchive
+    $zip = new ZipArchive();
+
+    // Mở file zip để giải nén
+    if ($zip->open($zipFilePath) === true) {
+        // Kiểm tra mật khẩu của file zip (thông qua phương thức setPassword khi giải nén)
+        $zip->setPassword($password);
+        // Giải nén toàn bộ file trong file zip vào thư mục chỉ định
+        $zip->extractTo($extractToPath);
+
+        // Đóng file zip sau khi hoàn thành giải nén
+        $zip->close();
+
+        echo "File đã được giải nén với mật khẩu thành công.";
+    } else {
+        echo "Không thể mở file zip.";
+    }
+```
